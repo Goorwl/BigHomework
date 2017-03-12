@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">毕业设计</string>
+    <string name="main_video">视频</string>
+    <string name="main_audio">音频</string>
+</resources>
