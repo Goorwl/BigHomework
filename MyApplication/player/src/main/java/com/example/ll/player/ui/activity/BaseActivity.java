@@ -27,8 +27,8 @@ public abstract class BaseActivity extends FragmentActivity implements UiInterfa
         super.onCreate(savedInstanceState);
         hideActionBar(getHideTitleBar());
         setContentView(getLayout());
-        initData();
         initView();
+        initData();
         initListener();
 //        setStaues();
     }

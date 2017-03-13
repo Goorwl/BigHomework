@@ -14,27 +14,27 @@ public class LogUtils {
     //标志位，打包前关闭
     private static boolean isLog = true;
 
-    public void i(String TAG ,String msg){
+    public static void i(String TAG ,String msg){
         if (isLog){
             Log.i(TAG, msg);
         }
     }
-    public void e(String TAG ,String msg){
+    public static void e(String TAG ,String msg){
         if (isLog){
             Log.e(TAG, msg);
         }
     }
-    public void w(String TAG ,String msg){
+    public static void w(String TAG ,String msg){
         if (isLog){
             Log.w(TAG, msg);
         }
     }
-    public void v(String TAG ,String msg){
+    public static void v(String TAG ,String msg){
         if (isLog){
             Log.v(TAG, msg);
         }
     }
-    public void d(String TAG ,String msg){
+    public static void d(String TAG ,String msg){
         if (isLog){
             Log.d(TAG, msg);
         }
