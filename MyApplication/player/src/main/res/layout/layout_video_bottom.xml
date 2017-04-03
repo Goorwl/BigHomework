@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_video_duration_control"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/half_white"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_player_progresstitme"
+            android:text="播放时间"/>
+
+        <SeekBar
+            android:id="@+id/sb_player"
+            style="@android:style/Widget.SeekBar"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="6dp"
+            android:minHeight="6dp"
+            android:progress="10"
+            android:progressDrawable="@drawable/style_seekbar"
+            android:secondaryProgress="50"
+            android:thumb="@drawable/video_progress_thumb"
+            android:thumbOffset="0dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/half_white"
+            android:id="@+id/tv_player_totaltime"
+            android:text="总时间"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_video_bottom_control"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="match_parent"
+            android:id="@+id/btn_video_back"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_back"
+            android:layout_weight="1"/>
+        <Button
+            android:layout_width="match_parent"
+            android:id="@+id/btn_video_pre"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_pre"
+            android:layout_weight="1"/>
+        <Button
+            android:layout_width="match_parent"
+            android:id="@+id/btn_video_play_pause"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_play"
+            android:layout_weight="1"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_video_next"
+            android:background="@drawable/selector_next"
+            android:layout_weight="1"/>
+        <Button
+            android:layout_width="match_parent"
+            android:id="@+id/btn_video_screen"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_fullscreen"
+            android:layout_weight="1"/>
+    </LinearLayout>
+</LinearLayout>
