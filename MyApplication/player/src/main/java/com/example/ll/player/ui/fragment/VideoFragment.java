@@ -15,7 +15,6 @@ import com.example.ll.player.ui.activity.VideoPlayerActivity;
 import com.example.ll.player.utils.LogUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Description :  视频内容列表
@@ -29,7 +28,7 @@ public class VideoFragment extends BaseFragment {
 
     private static final String TAG = "VideoFragment";
     private RecyclerView mRecyclerView;
-    private List<VideoBean> mList;
+    private ArrayList<VideoBean> mList;
 
     @Override
     public int getLayout() {
@@ -45,7 +44,6 @@ public class VideoFragment extends BaseFragment {
 
         while (cursor.moveToNext()) {
             VideoBean videoBean = VideoBean.fromCursor(cursor);
-            LogUtils.e(TAG,videoBean.toString());
             mList.add(videoBean);
         }
     }
@@ -60,7 +58,9 @@ public class VideoFragment extends BaseFragment {
             @Override
             public void onItemClick(View view, VideoBean bean) {
                 Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
-                intent.putExtra("bean",bean);
+                int i = mList.indexOf(bean);
+                intent.putExtra("list", mList);
+                intent.putExtra("position",i);
                 startActivity(intent);
             }
         });

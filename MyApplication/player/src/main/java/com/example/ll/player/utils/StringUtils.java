@@ -1,5 +1,8 @@
 package com.example.ll.player.utils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by wule on 2017/4/3.
  * 格式化字符串工具类
@@ -19,5 +22,17 @@ public class StringUtils {
         } else {
             return String.format("%02d:%02d", m, s);
         }
+    }
+
+    // 获取当前系统时间
+    public static String systemTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        String format = sdf.format(new Date());
+        return format;
+    }
+
+    // 截取音频名称
+    public static String getTitle(String s){
+        return s.substring(0,s.lastIndexOf("."));
     }
 }

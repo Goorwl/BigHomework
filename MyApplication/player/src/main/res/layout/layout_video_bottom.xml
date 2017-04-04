@@ -2,12 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:id="@+id/ll_bottom"
               android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
+        android:padding="10dp"
         android:gravity="center_vertical"
         android:background="@drawable/bg_video_duration_control"
         android:orientation="horizontal">
@@ -17,7 +18,7 @@
             android:textSize="18sp"
             android:textColor="@color/half_white"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_player_progresstitme"
+            android:id="@+id/tv_player_progresstime"
             android:text="播放时间"/>
 
         <SeekBar
@@ -32,7 +33,7 @@
             android:minHeight="6dp"
             android:progress="10"
             android:progressDrawable="@drawable/style_seekbar"
-            android:secondaryProgress="50"
+            android:secondaryProgress="100"
             android:thumb="@drawable/video_progress_thumb"
             android:thumbOffset="0dp"/>
 

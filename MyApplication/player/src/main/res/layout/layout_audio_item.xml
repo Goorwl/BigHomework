@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+    >
+
+    <ImageView
+        android:id="@+id/iv_audio_icon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/music_default_bg"
+        />
+
+    <TextView
+        android:id="@+id/tv_audio_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/iv_audio_icon"
+        android:text="title"/>
+
+    <TextView
+        android:id="@+id/tv_audio_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/iv_audio_icon"
+        android:layout_marginBottom="15dp"
+        android:textColor="@color/half_white"
+        android:layout_toEndOf="@+id/iv_audio_icon"
+        android:text="00.00.00"/>
+
+    <TextView
+        android:id="@+id/tv_audio_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/half_white"
+        android:layout_marginRight="15dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:text="28M"/>
+</RelativeLayout>
