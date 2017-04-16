@@ -1,1 +1,1 @@
-include ':player'
+include ':player', ':vitamio'

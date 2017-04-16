@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.ll.player.R;
 import com.example.ll.player.bean.AudioBean;
+import com.example.ll.player.lyric.LyricView;
 import com.example.ll.player.ui.service.AudioService;
 import com.example.ll.player.ui.service.IAdudioMethod;
 import com.example.ll.player.utils.StringUtils;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 public class AudioActivity extends BaseActivity implements View.OnClickListener {
 
     private static final int MSG_UPDATE_PLAY_TIME = 0;
+    private static final int MSG_ROLL_LYRIC = 1;
     private ArrayList<AudioBean> mList;
     private ServiceConnection mConnection;
     private AudioService mService;
@@ -42,6 +44,8 @@ public class AudioActivity extends BaseActivity implements View.OnClickListener 
     private Button mBtnNext;
     private MyBroadcastReceiver mMyBroadcastReceiver;
     private TextView mTvTime;
+    private LyricView mLyricView;
+    private AnimationDrawable mAd;
 
 
     @Override
@@ -64,9 +68,8 @@ public class AudioActivity extends BaseActivity implements View.OnClickListener 
         registerReceiver(mMyBroadcastReceiver, filter);
 
         //开启帧动画
-        AnimationDrawable ad = (AnimationDrawable) mIvWave.getBackground();
-        ad.start();
-
+        mAd = (AnimationDrawable) mIvWave.getBackground();
+        mAd.start();
     }
 
     @Override
@@ -80,6 +83,7 @@ public class AudioActivity extends BaseActivity implements View.OnClickListener 
         mBtnPlayPause = (Button) findViewById(R.id.btn_play_pause);
         mBtnNext = (Button) findViewById(R.id.btn_next);
         mTvTime = (TextView) findViewById(R.id.tv_play_total_time);
+        mLyricView = (LyricView) findViewById(R.id.lyric_view);
 //        Button btnList = findViewById(R.id.btn)
     }
 
@@ -154,13 +158,31 @@ public class AudioActivity extends BaseActivity implements View.OnClickListener 
             updatePlayPause();
             AudioBean bean = (AudioBean) intent.getSerializableExtra("bean");
 
+            String name = bean.getName();
             //设置音乐的标题
-            mTvTitle.setText(bean.getName());
+            mTvTitle.setText(name);
             // 关联seekbar
             mSbAudio.setMax(mService.getTotalTime());
 
-            startPlatTime();
+            startPlayTime();
+
+            // 修改显示图标
+            updatePlayModeStatues();
+
+            // 从歌词文件中加载歌词
+//            File file = new File("/sdcard/Download/" + name);
+//            mLyricView.parseLyrics(file);
+            mLyricView.parseLyrics(name);
+
+            // 滚动歌词
+            rollLyric();
         }
+    }
+
+    private void rollLyric() {
+        mLyricView.roll(mService.getCurrentTime(), mService.getTotalTime());
+        // 不写时间表示实时处理消息
+        mHandler.sendEmptyMessage(MSG_ROLL_LYRIC);
     }
 
     Handler mHandler = new Handler() {
@@ -169,14 +191,17 @@ public class AudioActivity extends BaseActivity implements View.OnClickListener 
             super.handleMessage(msg);
             switch (msg.what) {
                 case MSG_UPDATE_PLAY_TIME:
-                    startPlatTime();
+                    startPlayTime();
+                    break;
+                case MSG_ROLL_LYRIC:
+                    rollLyric();
                     break;
             }
         }
     };
 
     // 设置播放时间
-    private void startPlatTime() {
+    private void startPlayTime() {
         int currentTime = mService.getCurrentTime();
         updatePlayTime(currentTime);
         mHandler.sendEmptyMessageDelayed(MSG_UPDATE_PLAY_TIME, 500);
@@ -193,7 +218,9 @@ public class AudioActivity extends BaseActivity implements View.OnClickListener 
     private void updatePlayPause() {
         if (mService.isPlaying()) {
             mBtnPlayPause.setBackgroundResource(R.drawable.audio_pause_selector);
+            mAd.start();
         } else {
+            mAd.stop();
             mBtnPlayPause.setBackgroundResource(R.drawable.audio_play_selector);
         }
     }

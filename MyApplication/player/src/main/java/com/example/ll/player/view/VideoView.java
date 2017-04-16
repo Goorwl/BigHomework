@@ -730,6 +730,4 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         }
         isFullScreen = !isFullScreen;
     }
-
-
 }

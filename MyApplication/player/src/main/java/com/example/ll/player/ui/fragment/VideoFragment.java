@@ -6,13 +6,14 @@ import android.database.Cursor;
 import android.provider.MediaStore.Video.Media;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.example.ll.player.R;
 import com.example.ll.player.adapter.VideoAdapter;
 import com.example.ll.player.bean.VideoBean;
 import com.example.ll.player.ui.activity.VideoPlayerActivity;
-import com.example.ll.player.utils.LogUtils;
+import com.example.ll.player.ui.activity.VitVideoPlayerActivity;
 
 import java.util.ArrayList;
 
@@ -57,10 +58,16 @@ public class VideoFragment extends BaseFragment {
         adapter.setOnItemClick(new VideoAdapter.onRecycleItemClickListener() {
             @Override
             public void onItemClick(View view, VideoBean bean) {
-                Intent intent = new Intent(getContext(), VideoPlayerActivity.class);
+                Intent intent;
+                Log.e(TAG, "onItemClick:  " + bean.getData());
+                if (bean.getData().endsWith("mp4") || bean.getData().endsWith("3gp") || bean.getData().endsWith("3gpp") || bean.getData().endsWith("3gpp2")) {
+                    intent = new Intent(getContext(), VideoPlayerActivity.class);
+                } else {
+                    intent = new Intent(getContext(), VitVideoPlayerActivity.class);
+                }
                 int i = mList.indexOf(bean);
                 intent.putExtra("list", mList);
-                intent.putExtra("position",i);
+                intent.putExtra("position", i);
                 startActivity(intent);
             }
         });

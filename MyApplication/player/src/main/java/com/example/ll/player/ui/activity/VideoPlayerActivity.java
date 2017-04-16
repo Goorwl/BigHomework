@@ -2,6 +2,7 @@ package com.example.ll.player.ui.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
@@ -9,6 +10,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -81,11 +84,40 @@ public class VideoPlayerActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public int getLayout() {
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        // 暂时没有实现导航栏的隐藏
+//        hideNavibar();
         return R.layout.activity_video_player;
+    }
+
+    private void hideNavibar() {
+        final View decorView = getWindow().getDecorView();
+        final int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                    // The system bars are visible. Make any desired
+                    // adjustments to your UI, such as showing the action bar or
+                    // other navigational controls.
+                    decorView.setSystemUiVisibility(uiOptions);
+                } else {
+                    //  The system bars are NOT visible. Make any desired
+                    // adjustments to your UI, such as hiding the action bar or
+                    // other navigational controls.
+                }
+            }
+        });
     }
 
     @Override
     public void initData() {
+
+        Log.e(TAG, "initData:  自己的");
+
         Intent intent = getIntent();
 
         Uri data = intent.getData();
@@ -191,6 +223,7 @@ public class VideoPlayerActivity extends BaseActivity implements View.OnClickLis
         mVideoview.setOnCompletionListener(new OnCompletionListener());
         mVideoview.setOnInfoListener(new OnInfoListener());
         mVideoview.setOnBufferingUpdateListener(new OnBufferingUpdateListener());
+        mVideoview.setOnErrorListener(new OnErrorListener());
 
         mBtnBack.setOnClickListener(this);
         mBtnPre.setOnClickListener(this);
@@ -285,7 +318,7 @@ public class VideoPlayerActivity extends BaseActivity implements View.OnClickLis
                 break;
             case MotionEvent.ACTION_MOVE:
                 /*
-                * 1. 最终音量= 滑动音量+初始音量
+                * 1.最终音量= 滑动音量+初始音量
                 * 2.滑动音量=屏幕百分比*最大音量
                 * 3.屏幕百分比=滑动距离*屏幕高度
                 * 4.滑动距离= 移动位置-按下位置
@@ -298,7 +331,6 @@ public class VideoPlayerActivity extends BaseActivity implements View.OnClickLis
                 updateVolumeMute(finalVolume);
                 break;
         }
-
         return super.onTouchEvent(event);
     }
 
@@ -306,6 +338,12 @@ public class VideoPlayerActivity extends BaseActivity implements View.OnClickLis
     private void updateVolumeMute(int progress) {
         mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
         mSbVolume.setProgress(progress);
+
+        if (progress == 0) {
+            mIvMute.setImageResource(R.drawable.mute_selector);
+        } else {
+            mIvMute.setImageResource(R.drawable.selector_voice);
+        }
     }
 
     // 切换播放，暂停
@@ -402,10 +440,11 @@ public class VideoPlayerActivity extends BaseActivity implements View.OnClickLis
             if (!fromUser) {
                 return;
             }
-            // TODO: 2017/4/4 修改静音图标
-//            if (progress == 0){
-//                mIvMute.setImageResource();
-//            }
+            if (progress == 0) {
+                mIvMute.setImageResource(R.drawable.mute_selector);
+            } else {
+                mIvMute.setImageResource(R.drawable.selector_voice);
+            }
 
             switch (seekBar.getId()) {
                 case R.id.seekBar:
@@ -472,10 +511,10 @@ public class VideoPlayerActivity extends BaseActivity implements View.OnClickLis
         if (isShowing) {
             com.nineoldandroids.view.ViewPropertyAnimator.animate(mLlTop).translationY(-mLlTop.getHeight());
             com.nineoldandroids.view.ViewPropertyAnimator.animate(mLlBottom).translationY(mLlBottom.getHeight());
-            notifyAutoHideCtrl();
         } else {
             com.nineoldandroids.view.ViewPropertyAnimator.animate(mLlTop).translationY(0);
             com.nineoldandroids.view.ViewPropertyAnimator.animate(mLlBottom).translationY(0);
+            notifyAutoHideCtrl();
         }
         isShowing = !isShowing;
     }
@@ -503,6 +542,25 @@ public class VideoPlayerActivity extends BaseActivity implements View.OnClickLis
             float pre = percent / 100f;
             int pro = (int) (pre * mp.getDuration());
             mSbplay.setSecondaryProgress(pro);
+        }
+    }
+
+    // 视频错误的监听
+    private class OnErrorListener implements MediaPlayer.OnErrorListener {
+        @Override
+        public boolean onError(MediaPlayer mp, int what, int extra) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(VideoPlayerActivity.this);
+            builder.setTitle("提示");
+            builder.setMessage("视频错误~");
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+            builder.show();
+            return false;
         }
     }
 }

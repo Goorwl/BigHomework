@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="high_light_text">18sp</dimen>
+    <dimen name="normal_text">15sp</dimen>
+    <dimen name="text_height">19dp</dimen>
+</resources>
